@@ -1242,7 +1242,7 @@ function makeDefinitionClickable(defText) {
       // lowercase the first alphabetic char after any opening punctuation
       line = line.replace(
         /^([(\s"«“¡¿]*)?([A-ZÁÉÍÓÚÜÑÇÀÈÌÒÙÂÊÎÔÛÄËÏÖÜÅÆØŒ])/u,
-        (m, pre = "", ch) => pre + ch.toLowerCase()
+        (m, pre = "", ch) => pre + ch
       );
       // strip trailing . ! ? …
       line = line.replace(/\s*[.!?…]\s*$/u, "");
@@ -1443,7 +1443,7 @@ function displaySearchResults(results, query = "") {
           // lowercase the first alphabetic char
           line = line.replace(
             /^([(\s"«“¡¿]*)?([A-ZÁÉÍÓÚÜÑÇÀÈÌÒÙÂÊÎÔÛÄËÏÖÜÅÆØŒ])/u,
-            (m, pre = "", ch) => pre + ch.toLowerCase()
+            (m, pre = "", ch) => pre + ch
           );
           // strip trailing . ! ? …
           line = line.replace(/\s*[.!?…]\s*$/u, "");
