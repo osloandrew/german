@@ -470,30 +470,17 @@ function generateInexactMatches(query) {
 
   // Handle common suffixes like 'ing', 'ed', etc.
   const suffixes = [
-    // plurals
-    "s",
-    "es",
-    // Latin verb endings (active + passive)
-    "o",
-    "as",
-    "a",
-    "amus",
-    "ant",
-    "es",
-    "et",
-    "emus",
-    "ent",
-    "is",
-    "it",
-    "imus",
-    "unt",
-    "tur",
-    "ntur", // 👈 added passive endings
-    // infinitive recovery
-    "r",
-    "ar",
-    "er",
-    "ir",
+    "e", // plural, infinitive
+    "en", // infinitive, plural
+    "er", // plural, comparative
+    "n", // plural
+    "s", // loanwords plural
+    "es", // plural
+    "chen",
+    "lein", // diminutives
+    "ung",
+    "heit",
+    "keit", // abstract nouns
   ];
   suffixes.forEach((suffix) => {
     if (query.endsWith(suffix)) {
@@ -1659,126 +1646,26 @@ function generateWordVariationsForSentences(word, pos) {
   const variations = [];
   const base = word.toLowerCase().trim();
 
-  // Latin reflexive pronouns (slightly different from Spanish/Norwegian)
-  const reflexivePronouns = ["me", "te", "se", "nos", "vos"];
-
-  // Handle verbs (very simplified endings by conjugation group)
   if (pos === "verb") {
-    const parts = base.split(",").map((p) => p.trim());
-    const infinitive = parts.length > 1 ? parts[1] : parts[0];
-
-    // Always include the raw entry and the infinitive
-    variations.push(base);
-    if (infinitive !== base) variations.push(infinitive);
-
-    if (infinitive.endsWith("are")) {
-      const stem = infinitive.slice(0, -3);
-      variations.push(
-        stem + "o",
-        stem + "as",
-        stem + "at",
-        stem + "amus",
-        stem + "atis",
-        stem + "ant"
-      );
-    } else if (infinitive.endsWith("ere")) {
-      const stem = infinitive.slice(0, -3);
-      variations.push(
-        stem + "eo",
-        stem + "es",
-        stem + "et",
-        stem + "emus",
-        stem + "etis",
-        stem + "ent", // 2nd
-        stem + "o",
-        stem + "is",
-        stem + "it",
-        stem + "imus",
-        stem + "itis",
-        stem + "unt" // 3rd
-      );
-    } else if (infinitive.endsWith("ire")) {
-      const stem = infinitive.slice(0, -3);
-      variations.push(
-        stem + "io",
-        stem + "is",
-        stem + "it",
-        stem + "imus",
-        stem + "itis",
-        stem + "iunt"
-      );
-    }
-  }
-  // Handle nouns (very simplified declension endings)
-  else if (pos === "noun") {
-    if (base.endsWith("a")) {
-      // 1st declension: rosa
-      const stem = base.slice(0, -1);
-      variations.push(
-        base, // rosa
-        stem + "ae", // rosae
-        stem + "am", // rosam
-        stem + "arum", // rosarum
-        stem + "is", // rosis
-        stem + "as" // rosas
-      );
-    } else if (base.endsWith("us") || base.endsWith("um")) {
-      // 2nd declension: dominus / bellum
-      const stem = base.replace(/us$|um$/, "");
-      variations.push(
-        base,
-        stem + "i", // domini
-        stem + "o", // domino
-        stem + "um", // dominum
-        stem + "orum", // dominorum
-        stem + "os", // dominos
-        stem + "is" // dominis
-      );
-    } else if (base.endsWith("is")) {
-      // 3rd declension genitive: civis
-      const stem = base.slice(0, -2);
-      variations.push(
-        base,
-        stem + "em", // civem
-        stem + "es", // cives
-        stem + "um", // civum
-        stem + "ibus" // civibus
-      );
-    } else {
-      variations.push(base);
-    }
-  }
-
-  // Handle adjectives (basic agreement endings)
-  else if (pos === "adjective") {
-    if (base.endsWith("us")) {
-      const stem = base.slice(0, -2);
-      variations.push(
-        base, // bonus
-        stem + "a", // bona
-        stem + "um", // bonum
-        stem + "i", // boni
-        stem + "ae", // bonae
-        stem + "os", // bonos
-        stem + "as", // bonas
-        stem + "orum", // bonorum
-        stem + "arum" // bonarum
-      );
-    } else {
-      variations.push(base);
-    }
-  }
-
-  // Handle reflexive phrases (very rough Latinization)
-  else if (word.split(" ").length === 2) {
-    const [verb, pronoun] = word.split(" ");
-    if (reflexivePronouns.includes(pronoun)) {
-      variations.push(word, verb + " " + pronoun);
-    }
-  }
-
-  // Always include the base form
-  if (!variations.includes(base)) {
+    // Basic conjugation endings (very rough)
+    const stem = base.replace(/en$/, "");
+    variations.push(
+      base,
+      stem + "e", // ich
+      stem + "st", // du
+      stem + "t", // er/sie/es
+      stem + "en", // wir
+      stem + "t", // ihr
+      stem + "en" // sie/Sie
+    );
+  } else if (pos === "noun") {
+    // Common plural endings
+    variations.push(base, base + "e", base + "en", base + "er", base + "s");
+  } else if (pos === "adjective") {
+    // Simple adjective endings
+    const stem = base.replace(/e$/, "");
+    variations.push(base, stem + "er", stem + "es", stem + "em", stem + "en");
+  } else {
     variations.push(base);
   }
 
