@@ -3,20 +3,20 @@ let results = [];
 let isEnglishVisible = true;
 let latestMultipleResults = null;
 const resultsContainer = document.getElementById("results-container");
-// Language + schema for Latin
+// Language + schema for German
 const APP_LANG = "de";
 
 // Map incoming CSV headers to the app’s canonical keys
 const SCHEMA_MAP = {
-  ord: "verbum",
-  engelsk: "anglice",
+  ord: "Wort",
+  engelsk: "Englisch",
   CEFR: "CEFR",
-  gender: "genus",
-  uttale: null, // not in Latin CSV
-  etymologi: null, // not in Latin CSV
-  definisjon: "definitio",
-  eksempel: "exemplum",
-  sentenceTranslation: "interpretatio",
+  gender: "Artikel",
+  uttale: null, // not in German CSV
+  etymologi: null, // not in German CSV
+  definisjon: "Definition",
+  eksempel: "Beispiel",
+  sentenceTranslation: "Übersetzung",
 };
 
 // Function to show or hide the landing card
@@ -141,12 +141,16 @@ function formatGender(gender) {
   const g = gender.toLowerCase().trim();
   const esNounMarkers = ["noun", "masculine", "feminine", "neuter"];
   const norNounMarkers = ["en", "et", "ei", "en-et", "en-ei-et"];
+  const deNounMarkers = ["der", "die", "das"];
 
   if (esNounMarkers.some((m) => g === m)) {
     // Latin CSV uses masculine/feminine for nouns
     return "noun - " + gender;
   }
   if (norNounMarkers.some((m) => g.startsWith(m))) {
+    return "noun - " + gender;
+  }
+  if (deNounMarkers.some((m) => g.startsWith(m))) {
     return "noun - " + gender;
   }
   return gender;
@@ -157,6 +161,7 @@ function formatGender(gender) {
   const g = gender.toLowerCase().trim();
   const esNounMarkers = ["noun", "masculine", "feminine", "neuter"];
   const norNounMarkers = ["en", "et", "ei", "en-et", "en-ei-et"];
+  const deNounMarkers = ["der", "die", "das"];
 
   if (g === "noun") return "noun";
 
@@ -165,6 +170,9 @@ function formatGender(gender) {
     return "noun - " + gender;
   }
   if (norNounMarkers.some((m) => g.startsWith(m))) {
+    return "noun - " + gender;
+  }
+  if (deNounMarkers.some((m) => g.startsWith(m))) {
     return "noun - " + gender;
   }
   return gender;
@@ -1366,11 +1374,9 @@ function displaySearchResults(results, query = "") {
 
     const g = (result.gender || "").toLowerCase();
     const NOUN_MARKERS = [
-      "en",
-      "et",
-      "ei",
-      "en-et",
-      "en-ei-et",
+      "der",
+      "die",
+      "das",
       "noun",
       "masculine",
       "feminine",
