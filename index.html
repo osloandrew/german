@@ -6,34 +6,34 @@
       name="viewport"
       content="width=device-width, initial-scale=1.0, user-scalable=no"
     />
-    <title>Latin Dictionary | Search in Latin or English</title>
+    <title>German Dictionary | Search in German or English</title>
 
     <!-- Meta Description -->
     <meta
       name="description"
-      content="Latin Dictionary is your resource for finding words in both Latin and English. Search, filter by part of speech, and discover new words."
+      content="German Dictionary is your resource for finding words in both German and English. Search, filter by part of speech, and discover new words."
     />
 
     <!-- Meta Keywords -->
     <meta
       name="keywords"
-      content="Latin dictionary, Latin to English, English to Latin, word search, language learning, part of speech filter, random words"
+      content="German dictionary, German to English, English to German, word search, language learning, part of speech filter, random words"
     />
 
     <!-- Open Graph for Social Media Sharing -->
     <meta
       property="og:title"
-      content="Latin Dictionary | Search in Latin or English"
+      content="German Dictionary | Search in German or English"
     />
     <meta
       property="og:description"
-      content="Use the Latin Dictionary to find translations and definitions for words in Latin and English."
+      content="Use the German Dictionary to find translations and definitions for words in German and English."
     />
     <meta
       property="og:image"
       content="Resources/Icons/android-chrome-512x512.png"
     />
-    <meta property="og:url" content="https://osloandrew.github.io/Latin/" />
+    <meta property="og:url" content="https://osloandrew.github.io/German/" />
 
     <!-- Stylesheets -->
     <link rel="stylesheet" href="styles.css" />
@@ -87,8 +87,8 @@
 
   <body>
     <header>
-      <h1 id="site-title" onclick="returnToLandingPage()">Latin Dictionary</h1>
-      <p id="site-subtitle">Search in Latin or English</p>
+      <h1 id="site-title" onclick="returnToLandingPage()">German Dictionary</h1>
+      <p id="site-subtitle">Search in German or English</p>
     </header>
 
     <div id="sticky-header" class="hidden">
@@ -216,7 +216,7 @@
                 id="search-bar"
                 placeholder=" "
                 onkeydown="handleKey(event)"
-                aria-label="Search for Latin or English words"
+                aria-label="Search for German or English words"
               />
               <button
                 id="clear-btn"
@@ -255,10 +255,10 @@
       <div id="landing-card" class="definition">
         <h2>
           Welcome to the <br />
-          Latin Dictionary
+          German Dictionary
         </h2>
         <p style="text-align: center">
-          Explore Latin vocabulary interactively. <br />
+          Explore German vocabulary interactively. <br />
           Click on one of the buttons below to get started.
         </p>
 
@@ -289,7 +289,7 @@
             <p>Explore real sentences in context using your chosen words.</p>
           </div>
 
-          <!-- Latin Stories Button -->
+          <!-- German Stories Button -->
           <div class="button-container">
             <img
               class="landing-card-image"
@@ -297,7 +297,7 @@
               alt="Stories"
             />
             <button class="landing-card-btn" onclick="selectType('stories')">
-              Latin Stories
+              German Stories
             </button>
             <p>
               Immerse yourself in fiction and non-fiction to deepen your
@@ -335,7 +335,7 @@
             >
               Pronunciation Guide
             </button>
-            <p>Perfect your pronunciation by learning Latin sounds.</p>
+            <p>Perfect your pronunciation by learning German sounds.</p>
           </div>
 
           <!-- Support Button -->
@@ -561,6 +561,7 @@
           "
         >
           <option value="">Other Languages</option>
+          <option value="german">German</option>
           <option value="hebrew">Hebrew</option>
           <option value="japanese">Japanese</option>
           <option value="latin">Latin</option>
@@ -568,7 +569,7 @@
           <option value="spanish">Spanish</option>
         </select>
       </div>
-      <p class="copyright">© 2025 Latin Dictionary</p>
+      <p class="copyright">© 2025 German Dictionary</p>
     </footer>
     <script>
       // Language site switcher -> navigates to https://osloandrew.github.io/{slug}/

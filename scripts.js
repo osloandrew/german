@@ -4,7 +4,7 @@ let isEnglishVisible = true;
 let latestMultipleResults = null;
 const resultsContainer = document.getElementById("results-container");
 // Language + schema for Latin
-const APP_LANG = "es";
+const APP_LANG = "de";
 
 // Map incoming CSV headers to the app’s canonical keys
 const SCHEMA_MAP = {
@@ -192,7 +192,7 @@ function clearInput() {
 async function fetchAndLoadDictionaryData() {
   try {
     console.log("Attempting to load data from local CSV file...");
-    const localResponse = await fetch("latinWords.csv");
+    const localResponse = await fetch("germanWords.csv");
     if (!localResponse.ok)
       throw new Error(`HTTP error! Status: ${localResponse.status}`);
     const localData = await localResponse.text();
