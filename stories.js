@@ -40,7 +40,7 @@ const genreIcons = {
   travel: '<i class="fas fa-plane"></i>', // Travel genre icon
 };
 
-const CSV_URL = "latinStories.csv";
+const CSV_URL = "germanStories.csv";
 const STORY_CACHE_KEY = "storyDataEs";
 const STORY_CACHE_TIME_KEY = "storyDataTimestampEs";
 
@@ -62,7 +62,7 @@ async function fetchAndLoadStoryData() {
     }).data;
     storyResults = parsed.map((entry) => ({
       ...entry,
-      titleLatin: (entry.titleLatin || "").trim(),
+      titleGerman: (entry.titleGerman || "").trim(),
     }));
 
     // 3) Optional: store for offline fallback (not used on next run)
@@ -85,7 +85,7 @@ function parseStoryCSVData(data) {
   const parsed = Papa.parse(data, { header: true, skipEmptyLines: true }).data;
   storyResults = parsed.map((entry) => ({
     ...entry,
-    titleLatin: (entry.titleLatin || "").trim(),
+    titleGerman: (entry.titleGerman || "").trim(),
   }));
 }
 
@@ -127,7 +127,7 @@ async function displayStoryList(filteredStories = storyResults) {
   clearContainer(); // Clear previous results
 
   // Reset the page title and URL to the main list view
-  document.title = "Stories - Latin Dictionary";
+  document.title = "Stories - German Dictionary";
   history.replaceState(
     {},
     "",
@@ -160,16 +160,16 @@ async function displayStoryList(filteredStories = storyResults) {
     const cefrMatch = selectedCEFR
       ? story.CEFR && story.CEFR.trim().toUpperCase() === selectedCEFR
       : true;
-    const hasLatin = story.latin && story.latin.trim() !== "";
+    const hasGerman = story.german && story.german.trim() !== "";
     // NEW: title search across ES + EN titles, like JP
     const matchesSearch =
       !searchText ||
-      (story.titleLatin &&
-        story.titleLatin.toLowerCase().includes(searchText)) ||
+      (story.titleGerman &&
+        story.titleGerman.toLowerCase().includes(searchText)) ||
       (story.titleEnglish &&
         story.titleEnglish.toLowerCase().includes(searchText));
 
-    return genreMatch && cefrMatch && hasLatin && matchesSearch;
+    return genreMatch && cefrMatch && hasGerman && matchesSearch;
   });
 
   // Shuffle the filtered stories using Fisher-Yates algorithm
@@ -202,11 +202,11 @@ async function displayStoryList(filteredStories = storyResults) {
 
     const es = document.createElement("div");
     es.classList.add("japanese-title"); // reuse existing class name to avoid CSS churn
-    es.textContent = story.titleLatin;
+    es.textContent = story.titleGerman;
 
     titleContainer.appendChild(es);
 
-    if (story.titleLatin !== story.titleEnglish) {
+    if (story.titleGerman !== story.titleEnglish) {
       const en = document.createElement("div");
       en.classList.add("english-title", "stories-subtitle");
       en.textContent = story.titleEnglish || "";
@@ -233,7 +233,7 @@ async function displayStoryList(filteredStories = storyResults) {
     li.appendChild(detail);
 
     // click → open reader (unchanged behavior)
-    li.addEventListener("click", () => displayStory(story.titleLatin));
+    li.addEventListener("click", () => displayStory(story.titleGerman));
 
     storyList.appendChild(li);
   });
@@ -251,7 +251,7 @@ async function displayStoryList(filteredStories = storyResults) {
   hideSpinner();
 }
 
-async function displayStory(titleLatin) {
+async function displayStory(titleGerman) {
   document.documentElement.classList.add("reading");
   showSpinner(); // Show spinner at the start of story loading
   const searchContainer = document.getElementById("search-container");
@@ -259,17 +259,17 @@ async function displayStory(titleLatin) {
     "search-container-inner"
   );
   const selectedStory = storyResults.find(
-    (story) => story.titleLatin === titleLatin
+    (story) => story.titleGerman === titleGerman
   );
 
   if (!selectedStory) {
-    console.error(`No story found with the title: ${titleLatin}`);
+    console.error(`No story found with the title: ${titleGerman}`);
     return;
   }
 
-  document.title = selectedStory.titleLatin + " - Latin Dictionary";
+  document.title = selectedStory.titleGerman + " - German Dictionary";
 
-  updateURL(null, "story", null, titleLatin); // Update URL with story parameter
+  updateURL(null, "story", null, titleGerman); // Update URL with story parameter
 
   clearContainer();
 
@@ -448,15 +448,15 @@ async function displayStory(titleLatin) {
       contentHTML = audioHTML + contentHTML;
     }
 
-    for (let i = 0; i < latinSentences.length; i++) {
-      const latinSentence = latinSentences[i].trim();
+    for (let i = 0; i < germanSentences.length; i++) {
+      const germanSentence = germanSentences[i].trim();
       const englishSentence = englishSentences[i]
         ? englishSentences[i].trim()
         : "";
 
       contentHTML += `
     <div class="couplet">
-      <div class="japanese-sentence">${latinSentence}</div>
+      <div class="japanese-sentence">${germanSentence}</div>
       <div class="english-sentence">${englishSentence}</div>
     </div>
   `;
@@ -472,9 +472,9 @@ async function displayStory(titleLatin) {
       const titleNode = document.createElement("div");
       titleNode.className = "sticky-title-container";
       titleNode.innerHTML = `
-  <h2 class="sticky-title-japanese">${selectedStory.titleLatin}</h2>
+  <h2 class="sticky-title-japanese">${selectedStory.titleGerman}</h2>
   ${
-    selectedStory.titleLatin !== selectedStory.titleEnglish
+    selectedStory.titleGerman !== selectedStory.titleEnglish
       ? `<p class="sticky-title-english">${selectedStory.titleEnglish}</p>`
       : ""
   }
@@ -493,12 +493,12 @@ async function displayStory(titleLatin) {
   };
 
   // Process story text into sentences
-  const standardizedLatin = selectedStory.latin.replace(/[“”«»]/g, '"');
+  const standardizedGerman = selectedStory.german.replace(/[“”«»]/g, '"');
   const standardizedEnglish = selectedStory.english.replace(/[“”«»]/g, '"');
   const sentenceRegex =
     /(?:(["]?.+?(?<!\bMr)(?<!\bMrs)(?<!\bMs)(?<!\bDr)(?<!\bProf)(?<!\bJr)(?<!\bSr)(?<!\bSt)(?<!\bMt)[.!?]["]?)(?=\s|$)|(?:\.\.\."))/g;
-  let latinSentences = standardizedLatin.match(sentenceRegex) || [
-    standardizedLatin,
+  let germanSentences = standardizedGerman.match(sentenceRegex) || [
+    standardizedGerman,
   ];
   let englishSentences = standardizedEnglish.match(sentenceRegex) || [
     standardizedEnglish,
@@ -526,13 +526,13 @@ async function displayStory(titleLatin) {
     }, []);
   };
 
-  latinSentences = combineSentences(latinSentences);
+  germanSentences = combineSentences(germanSentences);
   englishSentences = combineSentences(englishSentences, /\basked\b/i);
 
   finalizeContent(false);
 }
 
-// Function to toggle the visibility of English sentences and update Latin box styles
+// Function to toggle the visibility of English sentences and update German box styles
 function toggleEnglishSentences() {
   const englishEls = document.querySelectorAll(".english-sentence");
   const englishBtn = document.querySelector(".stories-english-btn");
